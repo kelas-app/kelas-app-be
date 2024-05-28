@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import Order from '../models/Order';
+import { Request, Response } from "express";
+import Order from "../models/Order";
 
 // Controller for handling order-related operations
 
@@ -8,8 +8,8 @@ export const getAllOrders = async (req: Request, res: Response) => {
   try {
     const orders = await Order.find();
     res.json(orders);
-  } catch (error: any) { // Explicitly define the type of error
-    res.status(500).json({ message: error.message });
+  } catch (error: any) {
+    res.status(500).json({ message: "Internal server error" }); // Handling unexpected errors
   }
 };
 
@@ -18,35 +18,47 @@ export const getOrderById = async (req: Request, res: Response) => {
   try {
     const order = await Order.findById(req.params.id);
     if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
+      return res.status(404).json({ message: "Order not found" });
     }
     res.json(order);
-  } catch (error: any) { // Explicitly define the type of error
-    res.status(500).json({ message: error.message });
+  } catch (error: any) {
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
 // Create a new order
 export const createOrder = async (req: Request, res: Response) => {
-  const { buyer_id, seller_id, product_id, quantity, total_price, status } = req.body;
-  const newOrder = new Order({ buyer_id, seller_id, product_id, quantity, total_price, status });
+  const { buyerId, sellerId, productId, quantity, totalPrice, status } =
+    req.body; // Naming convention adjustment
+  const newOrder = new Order({
+    buyerId,
+    sellerId,
+    productId,
+    quantity,
+    totalPrice,
+    status,
+  });
   try {
     const savedOrder = await newOrder.save();
     res.status(201).json(savedOrder);
-  } catch (error: any) { // Explicitly define the type of error
-    res.status(400).json({ message: error.message });
+  } catch (error: any) {
+    res.status(400).json({ message: error.message }); // Sending error message from caught error
   }
 };
 
 // Update an order
 export const updateOrder = async (req: Request, res: Response) => {
   try {
-    const updatedOrder = await Order.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const updatedOrder = await Order.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true }
+    );
     if (!updatedOrder) {
-      return res.status(404).json({ message: 'Order not found' });
+      return res.status(404).json({ message: "Order not found" });
     }
     res.json(updatedOrder);
-  } catch (error: any) { // Explicitly define the type of error
+  } catch (error: any) {
     res.status(400).json({ message: error.message });
   }
 };
@@ -56,10 +68,10 @@ export const deleteOrder = async (req: Request, res: Response) => {
   try {
     const deletedOrder = await Order.findByIdAndDelete(req.params.id);
     if (!deletedOrder) {
-      return res.status(404).json({ message: 'Order not found' });
+      return res.status(404).json({ message: "Order not found" });
     }
-    res.json({ message: 'Order deleted successfully' });
-  } catch (error: any) { // Explicitly define the type of error
+    res.json({ message: "Order deleted successfully" });
+  } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
 };
