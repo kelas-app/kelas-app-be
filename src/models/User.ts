@@ -26,7 +26,7 @@ const UserSchema: Schema = new Schema({
   createdat: { type: Date, default: Date.now },
   updatedat: { type: Date, default: Date.now },
   avatar: { type: String, default: '/uploads/default_avatar.png' },
-  role: { type: String, enum: ['buyer', 'seller'], default: 'buyer' }
+  role: { type: String, enum: ['buyer', 'seller','admin'], default: 'buyer' }
 });
 
 export default mongoose.model<IUser>('User', UserSchema);

@@ -27,8 +27,12 @@ export const registerSchema = Joi.object({
     .messages({ "string.email": "Please enter a valid email address" }),
 
   phone: Joi.string()
+    .min(10)
     .pattern(/^[0-9]+$/)
-    .message("Phone number must contain only digits")
+    .messages({
+      'string.min': 'Phone number must be at least 10 digits long',
+      'string.pattern.base': 'Phone number must contain only digits',
+    })
     .optional(),
 
   password: Joi.string()
@@ -44,24 +48,50 @@ export const registerSchema = Joi.object({
 // Schema for product details
 export const productSchema = Joi.object({
   name: Joi.string()
+    .min(2)
+    .max(100)
     .required()
-    .messages({ "any.required": "Product name is required" }),
+    .messages({
+      "string.empty": "Name is required",
+      "string.min": "Name should have a minimum length of {#limit}",
+      "string.max": "Name should have a maximum length of {#limit}",
+      "any.required": "Name is required"
+    }),
 
   category: Joi.string()
     .required()
     .messages({ "any.required": "Category is required" }),
 
   description: Joi.string()
+    .min(10)
+    .max(500)
     .required()
-    .messages({ "any.required": "Description is required" }),
+    .messages({
+      "string.empty": "Description is required",
+      "string.min": "Description should have a minimum length of {#limit}",
+      "string.max": "Description should have a maximum length of {#limit}",
+      "any.required": "Description is required"
+    }),
 
   price: Joi.number()
+    .min(0)
     .required()
-    .messages({ "any.required": "Price is required" }),
+    .messages({
+      "number.base": "Price must be a number",
+      "number.empty": "Price is required",
+      "number.min": "Price should be a non-negative number",
+      "any.required": "Price is required"
+    }),
 
-  seller_id: Joi.string()
+  sellerId: Joi.string()
+    .regex(/^[0-9a-fA-F]{24}$/)
     .required()
-    .messages({ "any.required": "Seller ID is required" }),
+    .messages({
+      "string.base": "Seller ID must be a string",
+      "string.empty": "Seller ID is required",
+      "string.pattern.base": "Seller ID must be a valid MongoDB ObjectId",
+      "any.required": "Seller ID is required"
+    }),
 });
 
 // Schema for logging in a user
@@ -75,3 +105,4 @@ export const loginSchema = Joi.object({
     .required()
     .messages({ "any.required": "Password is required" }),
 });
+
