@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
 import Product from "../models/Product";
-import { productSchema } from '../utils/validation'; // Import Joi validation schema
-
-// Controller for handling product-related operations
+import { productSchema } from '../utils/validation';
 
 // Get all products
 export const getAllProducts = async (
@@ -35,7 +33,7 @@ export const getProductById = async (
 
 // Create a new product
 export const createProduct = async (req: Request, res: Response): Promise<Response> => {
-  const { error } = productSchema.validate(req.body); // Validate request body using Joi schema
+  const { error } = productSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
