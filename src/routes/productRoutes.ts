@@ -3,7 +3,7 @@ import { authenticateToken } from '../middleware/authMiddleware';
 import { getAllProducts, getProductById, createProduct, updateProduct, deleteProduct } from '../controllers/productController';
 import { productSchema } from '../utils/validation';
 import validate from '../middleware/validationMiddleware';
-import { checkSellerRole } from '../middleware/roleMiddleware'; // Use the correct path
+import { checkSellerRole } from '../middleware/roleMiddleware';
 
 
 const router = express.Router();

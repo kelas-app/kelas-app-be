@@ -2,18 +2,18 @@ import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IProduct extends Document {
   name: string;
-  category: string; // New category field
+  category: string;
   description: string;
   price: number;
-  sellerId: string; // Reference to the _id field of the User document
+  sellerId: string;
 }
 
 const ProductSchema: Schema = new Schema({
   name: { type: String, required: true },
-  category: { type: String, required: true }, // New category field
+  category: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
-  sellerId: { type: String, required: true }, // Reference to the _id field of the User document
+  sellerId: { type: String, required: true },
 });
 
 export default mongoose.model<IProduct>('Product', ProductSchema);

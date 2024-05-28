@@ -3,14 +3,18 @@ import Joi from "joi";
 // Schema for registering a new user
 export const registerSchema = Joi.object({
   firstname: Joi.string()
-    .pattern(/^[a-zA-Z ]*$/)
+    .trim()
+    .pattern(/^[a-zA-Z]+(?: [a-zA-Z]+)*$/)
     .required()
     .messages({
       "string.pattern.base": "First name must contain only letters and spaces",
+      "string.empty": "First name is required",
+      "any.required": "First name is required",
     }),
 
   lastname: Joi.string()
-    .pattern(/^[a-zA-Z ]*$/)
+    .trim()
+    .pattern(/^[a-zA-Z]+(?: [a-zA-Z]+)*$/)
     .optional()
     .messages({
       "string.pattern.base": "Last name must contain only letters and spaces",
@@ -19,30 +23,68 @@ export const registerSchema = Joi.object({
   username: Joi.string()
     .min(5)
     .required()
-    .messages({ "string.min": "Username must be at least 5 characters long" }),
+    .messages({
+      "string.min": "Username must be at least 5 characters long",
+      "string.empty": "Username is required",
+      "any.required": "Username is required",
+    }),
 
   email: Joi.string()
-    .email()
+    .trim()
+    .email({ tlds: { allow: false } })
     .required()
-    .messages({ "string.email": "Please enter a valid email address" }),
+    .messages({
+      "string.email": "Please enter a valid email address",
+      "string.empty": "Email address is required",
+      "any.required": "Email address is required",
+    }),
 
   phone: Joi.string()
+    .trim()
     .min(10)
     .pattern(/^[0-9]+$/)
+    .optional()
     .messages({
       'string.min': 'Phone number must be at least 10 digits long',
       'string.pattern.base': 'Phone number must contain only digits',
-    })
-    .optional(),
+    }),
 
   password: Joi.string()
     .min(5)
     .required()
-    .messages({ "string.min": "Password must be at least 5 characters long" }),
+    .messages({
+      "string.min": "Password must be at least 5 characters long",
+      "string.empty": "Password is required",
+      "any.required": "Password is required",
+    }),
 
   address: Joi.string()
+    .trim()
     .required()
-    .messages({ "any.required": "Address is required" }),
+    .messages({
+      "string.empty": "Address is required",
+      "any.required": "Address is required",
+    }),
+});
+
+// Schema for logging in a user
+export const loginSchema = Joi.object({
+  email: Joi.string()
+    .trim()
+    .email({ tlds: { allow: false } })
+    .required()
+    .messages({ 
+      "string.email": "Please enter a valid email address",
+      "string.empty": "Email address is required",
+      "any.required": "Email address is required",
+    }),
+
+  password: Joi.string()
+    .required()
+    .messages({ 
+      "string.empty": "Password is required",
+      "any.required": "Password is required",
+    }),
 });
 
 // Schema for product details
@@ -93,16 +135,3 @@ export const productSchema = Joi.object({
       "any.required": "Seller ID is required"
     }),
 });
-
-// Schema for logging in a user
-export const loginSchema = Joi.object({
-  email: Joi.string()
-    .email()
-    .required()
-    .messages({ "string.email": "Please enter a valid email address" }),
-
-  password: Joi.string()
-    .required()
-    .messages({ "any.required": "Password is required" }),
-});
-
