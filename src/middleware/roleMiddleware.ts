@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import User from '../models/User'; // Ensure you have a User model that contains roles
+import User from '../models/User';
 
 export const checkSellerRole = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const user = await User.findById(req.user.id); // Find the user by ID attached in the req.user by authenticateToken middleware
+    const user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
