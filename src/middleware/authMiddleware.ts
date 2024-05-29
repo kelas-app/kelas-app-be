@@ -5,7 +5,7 @@ import config from '../../config/config';
 declare global {
   namespace Express {
     interface Request {
-      user?: any; // Define the 'user' property on the Request object
+      user?: any; 
     }
   }
 }

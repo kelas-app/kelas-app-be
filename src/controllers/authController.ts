@@ -10,7 +10,6 @@ export const registerUser = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  // Validate the request body
   const { error } = registerSchema.validate(req.body);
   if (error) {
     return res
@@ -30,7 +29,6 @@ export const registerUser = async (
   } = req.body;
 
   try {
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res
@@ -38,10 +36,8 @@ export const registerUser = async (
         .json({ status: "error", message: "Email already registered" });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new user with default avatar if not provided
     const newUser = new User({
       firstname,
       lastname,
@@ -55,7 +51,6 @@ export const registerUser = async (
 
     const savedUser = await newUser.save();
 
-    // Generate JWT token
     const token = jwt.sign({ id: savedUser._id }, config.jwtSecret, {
       expiresIn: "1h",
     });
@@ -63,7 +58,7 @@ export const registerUser = async (
     return res.status(201).json({
       status: "success",
       message: "User created successfully",
-      data: { ...savedUser.toObject(), password: undefined }, // Exclude password from response
+      data: { ...savedUser.toObject(), password: undefined },
       token,
     });
   } catch (error: any) {
@@ -76,7 +71,6 @@ export const loginUser = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  // Validate the request body
   const { error } = loginSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -85,19 +79,16 @@ export const loginUser = async (
   const { email, password } = req.body;
 
   try {
-    // Find user by email (case-insensitive search)
     const user = await User.findOne({ email: new RegExp(`^${email}$`, "i") });
     if (!user) {
       return res.status(404).json({ message: "Invalid credentials" });
     }
 
-    // Check password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // Generate JWT token
     const token = jwt.sign({ id: user._id }, config.jwtSecret, {
       expiresIn: "1h",
     });
@@ -106,7 +97,7 @@ export const loginUser = async (
       status: "success",
       message: "Login successful",
       token,
-      data: { ...user.toObject(), password: undefined }, // Exclude password from response
+      data: { ...user.toObject(), password: undefined }, 
     });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
