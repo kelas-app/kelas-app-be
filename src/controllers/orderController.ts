@@ -9,7 +9,7 @@ export const getAllOrders = async (req: Request, res: Response) => {
     const orders = await Order.find();
     res.json(orders);
   } catch (error: any) {
-    res.status(500).json({ message: "Internal server error" }); 
+    res.status(500).json({ message: "Internal server error" }); // Handling unexpected errors
   }
 };
 
@@ -29,7 +29,7 @@ export const getOrderById = async (req: Request, res: Response) => {
 // Create a new order
 export const createOrder = async (req: Request, res: Response) => {
   const { buyerId, sellerId, productId, quantity, totalPrice, status } =
-    req.body; 
+    req.body; // Naming convention adjustment
   const newOrder = new Order({
     buyerId,
     sellerId,
@@ -42,7 +42,7 @@ export const createOrder = async (req: Request, res: Response) => {
     const savedOrder = await newOrder.save();
     res.status(201).json(savedOrder);
   } catch (error: any) {
-    res.status(400).json({ message: error.message }); 
+    res.status(400).json({ message: error.message }); // Sending error message from caught error
   }
 };
 
