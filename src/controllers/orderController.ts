@@ -1,15 +1,13 @@
 import { Request, Response } from "express";
 import Order from "../models/Order";
 
-// Controller for handling order-related operations
-
 // Get all orders
 export const getAllOrders = async (req: Request, res: Response) => {
   try {
     const orders = await Order.find();
     res.json(orders);
   } catch (error: any) {
-    res.status(500).json({ message: "Internal server error" }); // Handling unexpected errors
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -29,7 +27,7 @@ export const getOrderById = async (req: Request, res: Response) => {
 // Create a new order
 export const createOrder = async (req: Request, res: Response) => {
   const { buyerId, sellerId, productId, quantity, totalPrice, status } =
-    req.body; // Naming convention adjustment
+    req.body;
   const newOrder = new Order({
     buyerId,
     sellerId,
@@ -42,7 +40,7 @@ export const createOrder = async (req: Request, res: Response) => {
     const savedOrder = await newOrder.save();
     res.status(201).json(savedOrder);
   } catch (error: any) {
-    res.status(400).json({ message: error.message }); // Sending error message from caught error
+    res.status(400).json({ message: error.message });
   }
 };
 
