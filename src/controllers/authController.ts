@@ -10,7 +10,6 @@ export const registerUser = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  // Validate the request body
   const { error } = registerSchema.validate(req.body);
   if (error) {
     return res
@@ -63,7 +62,7 @@ export const registerUser = async (
     return res.status(201).json({
       status: "success",
       message: "User created successfully",
-      data: { ...savedUser.toObject(), password: undefined }, // Exclude password from response
+      data: { ...savedUser.toObject(), password: undefined },
       token,
     });
   } catch (error: any) {
@@ -76,7 +75,6 @@ export const loginUser = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  // Validate the request body
   const { error } = loginSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
@@ -85,19 +83,16 @@ export const loginUser = async (
   const { email, password } = req.body;
 
   try {
-    // Find user by email (case-insensitive search)
     const user = await User.findOne({ email: new RegExp(`^${email}$`, "i") });
     if (!user) {
       return res.status(404).json({ message: "Invalid credentials" });
     }
 
-    // Check password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // Generate JWT token
     const token = jwt.sign({ id: user._id }, config.jwtSecret, {
       expiresIn: "1h",
     });
@@ -106,7 +101,7 @@ export const loginUser = async (
       status: "success",
       message: "Login successful",
       token,
-      data: { ...user.toObject(), password: undefined }, // Exclude password from response
+      data: { ...user.toObject(), password: undefined },
     });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });

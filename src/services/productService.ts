@@ -1,7 +1,5 @@
 import Product, { IProduct } from "../models/Product";
 
-// Service for product-related operations
-
 // Get all products
 export const getAllProducts = async (): Promise<IProduct[]> => {
   try {

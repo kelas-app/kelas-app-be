@@ -1,7 +1,5 @@
 import Order, { IOrder } from "../models/Order";
 
-// Service for order-related operations
-
 // Get all orders
 export const getAllOrders = async (): Promise<IOrder[]> => {
   try {

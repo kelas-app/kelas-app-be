@@ -1,7 +1,5 @@
 import User, { IUser } from "../models/User";
 
-// Service for user-related operations
-
 // Register a new user
 export const registerUser = async (userData: IUser): Promise<IUser> => {
   try {
