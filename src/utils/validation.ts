@@ -134,5 +134,4 @@ export const productSchema = Joi.object({
       "string.pattern.base": "Seller ID must be a valid MongoDB ObjectId",
       "any.required": "Seller ID is required"
     }),
-    
 });
