@@ -1,9 +1,9 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
 export interface IOrder extends Document {
-  buyer_id: string; // Reference to the _id field of the User document
-  sellerId: string; // Reference to the _id field of the User document
-  product_id: string; // Reference to the _id field of the Product document
+  buyer_id: string; 
+  sellerId: string; 
+  product_id: string;
   quantity: number;
   total_price: number;
   order_date: Date;
