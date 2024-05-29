@@ -33,32 +33,20 @@ export const getProductById = async (
 
 // Create a new product
 export const createProduct = async (req: Request, res: Response): Promise<Response> => {
-  const { name, description, price, category } = req.body;
-  const sellerId = req.user.id;
-  let productImage: string[] = [];
-
-  if (req.files && Array.isArray(req.files) && req.files.length > 0) {
-    productImage = req.files.map((file: Express.Multer.File) => file.filename);
-  }
-
-  const { error } = productSchema.validate({ name, description, price, category, sellerId });
+  const { error } = productSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
 
-  if (productImage.length === 0) {
-    return res.status(400).json({ message: 'Product Image is required' });
-  }
-
+  const { name, description, price, category } = req.body;
+  const sellerId = req.user.id;
   const newProduct = new Product({
     name,
     description,
     price,
     sellerId,
     category,
-    productImage,
   });
-
   try {
     const savedProduct = await newProduct.save();
     return res.status(201).json(savedProduct);
