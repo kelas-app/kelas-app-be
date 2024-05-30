@@ -8,6 +8,7 @@ import authRoutes from "./src/routes/authRoutes";
 import userRoutes from "./src/routes/userRoutes";
 import productRoutes from "./src/routes/productRoutes";
 import orderRoutes from "./src/routes/orderRoutes";
+import cartRoutes from "./src/routes/cartRoutes";
 import { errorHandler } from "./src/middleware/errorMiddleware";
 
 const app = express();
@@ -31,6 +32,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
+app.use("/api/cart", cartRoutes);
 
 // Error handling middleware
 app.use(errorHandler);
