@@ -41,13 +41,9 @@ export const createProduct = async (req: Request, res: Response): Promise<Respon
     productImage = req.files.map((file: Express.Multer.File) => file.filename);
   }
 
-  const { error } = productSchema.validate({ name, description, price, category, sellerId });
+  const { error } = productSchema.validate({ name, description, price, category, sellerId, productImage });
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
-  }
-
-  if (productImage.length === 0) {
-    return res.status(400).json({ message: 'Product Image is required' });
   }
 
   const newProduct = new Product({
