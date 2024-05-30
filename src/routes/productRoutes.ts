@@ -11,7 +11,7 @@ router.use(authenticateToken);
 router.get('/', getAllProducts);
 router.get('/:id', getProductById);
 router.post('/', upload.array('productImage', 2), checkSellerRole, createProduct);
-router.put('/:id', checkSellerRole, updateProduct);
+router.put('/:id', upload.array('productImage', 2), checkSellerRole, updateProduct);
 router.delete('/:id', checkSellerRole, deleteProduct);
 
 export default router;
