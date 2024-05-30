@@ -134,4 +134,9 @@ export const productSchema = Joi.object({
       "string.pattern.base": "Seller ID must be a valid MongoDB ObjectId",
       "any.required": "Seller ID is required"
     }),
+    
+    productImage: Joi.array().items(Joi.string()).min(1).required().messages({
+      "array.min": "At least one product image is required",
+      "any.required": "Product image is required",
+    })
 });
