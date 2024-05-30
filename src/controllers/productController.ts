@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import Product from "../models/Product";
-import { productSchema } from '../utils/validation';
+import { productSchema } from "../utils/validation";
+import { bucket } from "../utils/googleCloudStorage";
+import path from "path";
+import { v4 as uuidv4 } from "uuid";
 
 // Get all products
 export const getAllProducts = async (
@@ -32,20 +35,49 @@ export const getProductById = async (
 };
 
 // Create a new product
-export const createProduct = async (req: Request, res: Response): Promise<Response> => {
+export const createProduct = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   const { name, description, price, category } = req.body;
   const sellerId = req.user.id;
   let productImage: string[] = [];
 
   if (req.files && Array.isArray(req.files) && req.files.length > 0) {
-    productImage = req.files.map((file: Express.Multer.File) => file.filename);
+    const uploadPromises = req.files.map(async (file: Express.Multer.File) => {
+      const blob = bucket.file(
+        `${uuidv4()}_${path.basename(file.originalname)}`
+      );
+      const blobStream = blob.createWriteStream({
+        resumable: false,
+      });
+
+      blobStream.end(file.buffer);
+
+      await new Promise((resolve, reject) => {
+        blobStream.on("finish", resolve);
+        blobStream.on("error", reject);
+      });
+
+      return `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+    });
+
+    productImage = await Promise.all(uploadPromises);
   }
 
-
-  const { error } = productSchema.validate({ name, description, price, category, sellerId, productImage });
+  const { error } = productSchema.validate({
+    name,
+    description,
+    price,
+    category,
+    sellerId,
+    productImage,
+  });
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
+
+  const newProduct = new Product({
     name,
     description,
     price,
@@ -63,16 +95,44 @@ export const createProduct = async (req: Request, res: Response): Promise<Respon
 };
 
 // Update a product
-export const updateProduct = async (req: Request, res: Response): Promise<Response> => {
+export const updateProduct = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   const { name, description, price, category } = req.body;
   const sellerId = req.user.id;
   let productImage: string[] = [];
 
   if (req.files && Array.isArray(req.files) && req.files.length > 0) {
-    productImage = req.files.map((file: Express.Multer.File) => file.filename);
+    const uploadPromises = req.files.map(async (file: Express.Multer.File) => {
+      const blob = bucket.file(
+        `${uuidv4()}_${path.basename(file.originalname)}`
+      );
+      const blobStream = blob.createWriteStream({
+        resumable: false,
+      });
+
+      blobStream.end(file.buffer);
+
+      await new Promise((resolve, reject) => {
+        blobStream.on("finish", resolve);
+        blobStream.on("error", reject);
+      });
+
+      return `https://storage.googleapis.com/${bucket.name}/${blob.name}`;
+    });
+
+    productImage = await Promise.all(uploadPromises);
   }
 
-  const { error } = productSchema.validate({ name, description, price, category, sellerId, productImage });
+  const { error } = productSchema.validate({
+    name,
+    description,
+    price,
+    category,
+    sellerId,
+    productImage,
+  });
   if (error) {
     return res.status(400).json({ message: error.details[0].message });
   }
