@@ -8,9 +8,10 @@ import userRoutes from "./src/routes/userRoutes";
 import productRoutes from "./src/routes/productRoutes";
 import orderRoutes from "./src/routes/orderRoutes";
 import cartRoutes from "./src/routes/cartRoutes";
-import conversationRoutes from './src/routes/conversationRoutes';
-import messageRoutes from './src/routes/messageRoutes';  
+import conversationRoutes from "./src/routes/conversationRoutes";
+import messageRoutes from "./src/routes/messageRoutes";
 import { errorHandler } from "./src/middleware/errorMiddleware";
+import path from "path"; // Import path module
 
 const app = express();
 
@@ -31,8 +32,16 @@ app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/orders", orderRoutes);
 app.use("/api/cart", cartRoutes);
-app.use('/api/conversations', conversationRoutes);
-app.use('/api/messages', messageRoutes);
+app.use("/api/conversations", conversationRoutes);
+app.use("/api/messages", messageRoutes);
+
+// Serve static files from the "public" directory
+app.use(express.static(path.join(__dirname, "public")));
+
+// Fallback to index.html for client-side routing (optional)
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "index.html"));
+});
 
 // Error handling middleware
 app.use(errorHandler);

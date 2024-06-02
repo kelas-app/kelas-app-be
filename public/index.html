@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API Testing Frontend</title>
+  </head>
+  <body>
+    <h1>API Testing Frontend</h1>
+
+    <!-- Authentication Section -->
+    <section>
+      <h2>Authentication</h2>
+      <form id="registerForm">
+        <h3>Register</h3>
+        <input
+          type="text"
+          id="regFirstName"
+          placeholder="First Name"
+          required
+        />
+        <input type="text" id="regLastName" placeholder="Last Name" required />
+        <input type="text" id="regUsername" placeholder="Username" required />
+        <input type="email" id="regEmail" placeholder="Email" required />
+        <input type="text" id="regPhone" placeholder="Phone" required />
+        <input
+          type="password"
+          id="regPassword"
+          placeholder="Password"
+          required
+        />
+        <input type="text" id="regAddress" placeholder="Address" required />
+        <button type="submit">Register</button>
+        <div id="registerOutput"></div>
+      </form>
+
+      <form id="loginForm">
+        <h3>Login</h3>
+        <input type="email" id="loginEmail" placeholder="Email" required />
+        <input
+          type="password"
+          id="loginPassword"
+          placeholder="Password"
+          required
+        />
+        <button type="submit">Login</button>
+        <div id="loginOutput"></div>
+      </form>
+    </section>
+
+    <!-- Product Section -->
+    <section>
+      <h2>Products</h2>
+      <form id="createProductForm">
+        <h3>Create Product</h3>
+        <input type="text" id="productName" placeholder="Name" required />
+        <input
+          type="text"
+          id="productDescription"
+          placeholder="Description"
+          required
+        />
+        <input type="number" id="productPrice" placeholder="Price" required />
+        <input
+          type="text"
+          id="productCategory"
+          placeholder="Category"
+          required
+        />
+        <input type="file" id="productImage" multiple />
+        <button type="submit">Create Product</button>
+        <div id="productOutput"></div>
+      </form>
+
+      <button id="getAllProducts">Get All Products</button>
+      <div id="productsList"></div>
+    </section>
+
+    <!-- Cart Section -->
+    <section>
+      <h2>Cart</h2>
+      <form id="addToCartForm">
+        <h3>Add to Cart</h3>
+        <input
+          type="text"
+          id="cartProductId"
+          placeholder="Product ID"
+          required
+        />
+        <input
+          type="number"
+          id="cartQuantity"
+          placeholder="Quantity"
+          required
+        />
+        <button type="submit">Add to Cart</button>
+        <div id="cartOutput"></div>
+      </form>
+
+      <button id="viewCart">View Cart</button>
+      <div id="cartItems"></div>
+    </section>
+
+    <!-- Conversation Section -->
+    <section>
+      <h2>Conversations</h2>
+      <form id="createConversationForm">
+        <h3>Create Conversation</h3>
+        <input
+          type="text"
+          id="conversationParticipants"
+          placeholder="Participants (comma separated user IDs)"
+          required
+        />
+        <button type="submit">Create Conversation</button>
+        <div id="conversationOutput"></div>
+      </form>
+
+      <form id="sendMessageForm">
+        <h3>Send Message</h3>
+        <input
+          type="text"
+          id="conversationId"
+          placeholder="Conversation ID"
+          required
+        />
+        <input
+          type="text"
+          id="messageSender"
+          placeholder="Sender ID"
+          required
+        />
+        <input
+          type="text"
+          id="messageContent"
+          placeholder="Message Content"
+          required
+        />
+        <button type="submit">Send Message</button>
+      </form>
+
+      <button id="getConversations">Get Conversations</button>
+      <div id="conversationsList"></div>
+    </section>
+
+    <!-- Order Section -->
+    <section>
+      <h2>Orders</h2>
+      <form id="createOrderForm">
+        <h3>Create Order</h3>
+        <input type="text" id="orderBuyerId" placeholder="Buyer ID" required />
+        <input
+          type="text"
+          id="orderSellerId"
+          placeholder="Seller ID"
+          required
+        />
+        <input
+          type="text"
+          id="orderProductId"
+          placeholder="Product ID"
+          required
+        />
+        <input
+          type="number"
+          id="orderQuantity"
+          placeholder="Quantity"
+          required
+        />
+        <input
+          type="number"
+          id="orderTotalPrice"
+          placeholder="Total Price"
+          required
+        />
+        <input type="text" id="orderStatus" placeholder="Status" required />
+        <button type="submit">Create Order</button>
+        <div id="orderOutput"></div>
+      </form>
+
+      <button id="getAllOrders">Get All Orders</button>
+      <div id="ordersList"></div>
+    </section>
+
+    <script src="js/auth.js"></script>
+    <script src="js/product.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/conversation.js"></script>
+    <script src="js/message.js"></script>
+    <script src="js/order.js"></script>
+  </body>
+</html>
