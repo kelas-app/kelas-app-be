@@ -35,3 +35,42 @@ export const findUserById = async (id: string): Promise<IUser | null> => {
     }
   }
 };
+
+export const addRatingAndReview = async (
+  userId: string,
+  rating: number,
+  comment: string
+): Promise<void> => {
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+    user.ratings.push({ value: rating, comment });
+    await user.save();
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Failed to add rating and review: ${error.message}`);
+    } else {
+      throw new Error("Failed to add rating and review: Unknown error occurred");
+    }
+  }
+};
+
+export const getRatingsAndReviews = async (
+  userId: string
+): Promise<{ value: number; comment: string }[]> => {
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error("User not found");
+    }
+    return user.ratings;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      throw new Error(`Failed to get ratings and reviews: ${error.message}`);
+    } else {
+      throw new Error("Failed to get ratings and reviews: Unknown error occurred");
+    }
+  }
+};
