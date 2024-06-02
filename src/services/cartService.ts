@@ -1,7 +1,11 @@
-import { CartItem } from '../models/Cart';
-import ShoppingCart from '../models/Cart';
+import { CartItem } from "../models/Cart";
+import ShoppingCart from "../models/Cart";
 
-export const addToCart = async (userId: string, productId: string, quantity: number): Promise<void> => {
+export const addToCart = async (
+  userId: string,
+  productId: string,
+  quantity: number
+): Promise<void> => {
   try {
     let cart = await ShoppingCart.findOne({ userId });
 
@@ -9,7 +13,9 @@ export const addToCart = async (userId: string, productId: string, quantity: num
       cart = new ShoppingCart({ userId, items: [] });
     }
 
-    const existingItemIndex = cart.items.findIndex(item => item.productId === productId);
+    const existingItemIndex = cart.items.findIndex(
+      (item) => item.productId === productId
+    );
 
     if (existingItemIndex !== -1) {
       cart.items[existingItemIndex].quantity += quantity;
@@ -23,15 +29,18 @@ export const addToCart = async (userId: string, productId: string, quantity: num
   }
 };
 
-export const removeFromCart = async (userId: string, productId: string): Promise<void> => {
+export const removeFromCart = async (
+  userId: string,
+  productId: string
+): Promise<void> => {
   try {
     const cart = await ShoppingCart.findOne({ userId });
 
     if (!cart) {
-      throw new Error('Cart not found');
+      throw new Error("Cart not found");
     }
 
-    cart.items = cart.items.filter(item => item.productId !== productId);
+    cart.items = cart.items.filter((item) => item.productId !== productId);
 
     await cart.save();
   } catch (error: any) {
@@ -39,18 +48,22 @@ export const removeFromCart = async (userId: string, productId: string): Promise
   }
 };
 
-export const updateCartItem = async (userId: string, productId: string, quantity: number): Promise<void> => {
+export const updateCartItem = async (
+  userId: string,
+  productId: string,
+  quantity: number
+): Promise<void> => {
   try {
     const cart = await ShoppingCart.findOne({ userId });
 
     if (!cart) {
-      throw new Error('Cart not found');
+      throw new Error("Cart not found");
     }
 
-    const item = cart.items.find(item => item.productId === productId);
+    const item = cart.items.find((item) => item.productId === productId);
 
     if (!item) {
-      throw new Error('Item not found in cart');
+      throw new Error("Item not found in cart");
     }
 
     item.quantity = quantity;
@@ -66,7 +79,7 @@ export const viewCart = async (userId: string): Promise<CartItem[]> => {
     const cart = await ShoppingCart.findOne({ userId });
 
     if (!cart) {
-      throw new Error('Cart not found');
+      throw new Error("Cart not found");
     }
 
     return cart.items;

@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import User from "../models/User";
 
-// Create a new user
 export const createUser = async (
   req: Request,
   res: Response
@@ -14,7 +13,6 @@ export const createUser = async (
   }
 };
 
-// Get all users
 export const getUsers = async (
   req: Request,
   res: Response
@@ -27,7 +25,6 @@ export const getUsers = async (
   }
 };
 
-// Get a user by ID
 export const getUserById = async (
   req: Request,
   res: Response
@@ -44,7 +41,6 @@ export const getUserById = async (
   }
 };
 
-// Update a user
 export const updateUser = async (
   req: Request,
   res: Response
@@ -63,7 +59,6 @@ export const updateUser = async (
   }
 };
 
-// Delete a user
 export const deleteUser = async (
   req: Request,
   res: Response

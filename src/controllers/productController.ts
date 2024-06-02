@@ -5,7 +5,6 @@ import { bucket } from "../utils/googleCloudStorage";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 
-// Get all products
 export const getAllProducts = async (
   req: Request,
   res: Response
@@ -18,7 +17,6 @@ export const getAllProducts = async (
   }
 };
 
-// Get a single product by ID
 export const getProductById = async (
   req: Request,
   res: Response
@@ -34,7 +32,6 @@ export const getProductById = async (
   }
 };
 
-// Create a new product
 export const createProduct = async (
   req: Request,
   res: Response
@@ -94,7 +91,6 @@ export const createProduct = async (
   }
 };
 
-// Update a product
 export const updateProduct = async (
   req: Request,
   res: Response
@@ -167,7 +163,6 @@ export const updateProduct = async (
   }
 };
 
-// Delete a product
 export const deleteProduct = async (
   req: Request,
   res: Response

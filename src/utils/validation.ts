@@ -1,6 +1,5 @@
 import Joi from "joi";
 
-// Schema for registering a new user
 export const registerSchema = Joi.object({
   firstname: Joi.string()
     .trim()
@@ -58,7 +57,6 @@ export const registerSchema = Joi.object({
   }),
 });
 
-// Schema for logging in a user
 export const loginSchema = Joi.object({
   email: Joi.string()
     .trim()
@@ -76,7 +74,6 @@ export const loginSchema = Joi.object({
   }),
 });
 
-// Schema for product details
 export const productSchema = Joi.object({
   name: Joi.string().min(2).max(100).required().messages({
     "string.empty": "Name is required",

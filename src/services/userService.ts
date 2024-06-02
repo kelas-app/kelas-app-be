@@ -1,6 +1,5 @@
 import User, { IUser } from "../models/User";
 
-// Register a new user
 export const registerUser = async (userData: IUser): Promise<IUser> => {
   try {
     return await User.create(userData);
@@ -13,7 +12,6 @@ export const registerUser = async (userData: IUser): Promise<IUser> => {
   }
 };
 
-// Find a user by email
 export const findUserByEmail = async (email: string): Promise<IUser | null> => {
   try {
     return await User.findOne({ email });
@@ -26,7 +24,6 @@ export const findUserByEmail = async (email: string): Promise<IUser | null> => {
   }
 };
 
-// Find a user by ID
 export const findUserById = async (id: string): Promise<IUser | null> => {
   try {
     return await User.findById(id);

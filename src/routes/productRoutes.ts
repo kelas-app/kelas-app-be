@@ -17,16 +17,15 @@ router.use(authenticateToken);
 router.get("/", getAllProducts);
 router.get("/:id", getProductById);
 
-// Tambahkan middleware upload dan periksa peran penjual pada route POST dan PUT
 router.post(
   "/",
-  upload.array("productImage", 2), // Maksimal 2 gambar per produk
+  upload.array("productImage", 2),
   checkSellerRole,
   createProduct
 );
 router.put(
   "/:id",
-  upload.array("productImage", 2), // Maksimal 2 gambar per produk
+  upload.array("productImage", 2),
   checkSellerRole,
   updateProduct
 );

@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 import config from "../../config/config";
 import { registerSchema, loginSchema } from "../utils/validation";
 
-// Register a new user
 export const registerUser = async (
   req: Request,
   res: Response
@@ -29,7 +28,6 @@ export const registerUser = async (
   } = req.body;
 
   try {
-    // Check if user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res
@@ -37,10 +35,8 @@ export const registerUser = async (
         .json({ status: "error", message: "Email already registered" });
     }
 
-    // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new user with default avatar if not provided
     const newUser = new User({
       firstname,
       lastname,
@@ -54,7 +50,6 @@ export const registerUser = async (
 
     const savedUser = await newUser.save();
 
-    // Generate JWT token
     const token = jwt.sign({ id: savedUser._id }, config.jwtSecret, {
       expiresIn: "1h",
     });
@@ -70,7 +65,6 @@ export const registerUser = async (
   }
 };
 
-// Login user
 export const loginUser = async (
   req: Request,
   res: Response

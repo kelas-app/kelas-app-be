@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import Order from "../models/Order";
 
-// Get all orders
 export const getAllOrders = async (req: Request, res: Response) => {
   try {
     const orders = await Order.find();
@@ -11,7 +10,6 @@ export const getAllOrders = async (req: Request, res: Response) => {
   }
 };
 
-// Get a single order by ID
 export const getOrderById = async (req: Request, res: Response) => {
   try {
     const order = await Order.findById(req.params.id);
@@ -24,7 +22,6 @@ export const getOrderById = async (req: Request, res: Response) => {
   }
 };
 
-// Create a new order
 export const createOrder = async (req: Request, res: Response) => {
   const { buyerId, sellerId, productId, quantity, totalPrice, status } =
     req.body;
@@ -44,7 +41,6 @@ export const createOrder = async (req: Request, res: Response) => {
   }
 };
 
-// Update an order
 export const updateOrder = async (req: Request, res: Response) => {
   try {
     const updatedOrder = await Order.findByIdAndUpdate(
@@ -61,7 +57,6 @@ export const updateOrder = async (req: Request, res: Response) => {
   }
 };
 
-// Delete an order
 export const deleteOrder = async (req: Request, res: Response) => {
   try {
     const deletedOrder = await Order.findByIdAndDelete(req.params.id);

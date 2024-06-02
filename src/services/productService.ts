@@ -1,6 +1,5 @@
 import Product, { IProduct } from "../models/Product";
 
-// Get all products
 export const getAllProducts = async (): Promise<IProduct[]> => {
   try {
     return await Product.find();
@@ -13,7 +12,6 @@ export const getAllProducts = async (): Promise<IProduct[]> => {
   }
 };
 
-// Get a single product by ID
 export const getProductById = async (id: string): Promise<IProduct | null> => {
   try {
     return await Product.findById(id);
@@ -26,7 +24,6 @@ export const getProductById = async (id: string): Promise<IProduct | null> => {
   }
 };
 
-// Create a new product
 export const createProduct = async (
   productData: IProduct
 ): Promise<IProduct> => {
@@ -41,7 +38,6 @@ export const createProduct = async (
   }
 };
 
-// Update a product
 export const updateProduct = async (
   id: string,
   productData: Partial<IProduct>
@@ -57,7 +53,6 @@ export const updateProduct = async (
   }
 };
 
-// Delete a product
 export const deleteProduct = async (id: string): Promise<void> => {
   try {
     await Product.findByIdAndDelete(id);

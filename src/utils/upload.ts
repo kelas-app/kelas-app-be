@@ -1,6 +1,6 @@
 import multer from "multer";
 
-const storage = multer.memoryStorage(); // Simpan file di memori sementara sebelum diupload ke bucket
+const storage = multer.memoryStorage();
 
 const fileFilter = (req: any, file: any, cb: any) => {
   if (!file.mimetype.startsWith("image/")) {

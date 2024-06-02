@@ -1,6 +1,5 @@
 import Order, { IOrder } from "../models/Order";
 
-// Get all orders
 export const getAllOrders = async (): Promise<IOrder[]> => {
   try {
     return await Order.find();
@@ -13,7 +12,6 @@ export const getAllOrders = async (): Promise<IOrder[]> => {
   }
 };
 
-// Get a single order by ID
 export const getOrderById = async (id: string): Promise<IOrder | null> => {
   try {
     return await Order.findById(id);
@@ -26,7 +24,6 @@ export const getOrderById = async (id: string): Promise<IOrder | null> => {
   }
 };
 
-// Create a new order
 export const createOrder = async (orderData: IOrder): Promise<IOrder> => {
   try {
     return await Order.create(orderData);
@@ -39,7 +36,6 @@ export const createOrder = async (orderData: IOrder): Promise<IOrder> => {
   }
 };
 
-// Update an order
 export const updateOrder = async (
   id: string,
   orderData: Partial<IOrder>
@@ -55,7 +51,6 @@ export const updateOrder = async (
   }
 };
 
-// Delete an order
 export const deleteOrder = async (id: string): Promise<void> => {
   try {
     await Order.findByIdAndDelete(id);
