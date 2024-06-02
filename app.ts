@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import morgan from "morgan";
+import moment from "moment";
 import config from "./config/config";
 import authRoutes from "./src/routes/authRoutes";
 import userRoutes from "./src/routes/userRoutes";
@@ -15,10 +16,16 @@ import path from "path"; // Import path module
 
 const app = express();
 
+// Custom morgan format with timestamp and success/error message
+morgan.token('date', (req, res) => moment().format());
+morgan.token('message', (req, res) => res.statusCode < 400 ? 'success' : 'error');
+
+const customMorganFormat = '[:date[iso]] :method :url :status :response-time ms - :res[content-length] :message';
+
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(morgan("dev"));
+app.use(morgan(customMorganFormat));
 
 // Connect to MongoDB
 mongoose
