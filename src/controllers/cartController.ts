@@ -11,11 +11,11 @@ export const addToCart = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const { productId, quantity } = req.body;
+  const { productId } = req.body;
   const userId = req.user.id;
 
   try {
-    await addToCartService(userId, productId, quantity);
+    await addToCartService(userId, productId);
     return res.status(200).json({ message: "Item added to cart" });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
@@ -40,10 +40,10 @@ export const updateCartItem = async (
   req: Request,
   res: Response
 ): Promise<Response> => {
-  const { productId, quantity } = req.body;
+  const { productId } = req.body;
   const userId = req.user.id;
   try {
-    await updateCartItemService(userId, productId, quantity);
+    await updateCartItemService(userId, productId);
     return res.status(200).json({ message: "Cart item updated" });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });

@@ -23,13 +23,11 @@ export const getOrderById = async (req: Request, res: Response) => {
 };
 
 export const createOrder = async (req: Request, res: Response) => {
-  const { buyerId, sellerId, productId, quantity, totalPrice, status } =
-    req.body;
+  const { buyerId, sellerId, productId, totalPrice, status } = req.body;
   const newOrder = new Order({
     buyerId,
     sellerId,
     productId,
-    quantity,
     totalPrice,
     status,
   });
