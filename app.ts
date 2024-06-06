@@ -11,6 +11,7 @@ import orderRoutes from "./src/routes/orderRoutes";
 import cartRoutes from "./src/routes/cartRoutes";
 import conversationRoutes from "./src/routes/conversationRoutes";
 import messageRoutes from "./src/routes/messageRoutes";
+import wishlistRoutes from "./src/routes/wishlistRoutes";
 import { errorHandler } from "./src/middleware/errorMiddleware";
 import path from "path";
 
@@ -40,6 +41,7 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/conversations", conversationRoutes);
 app.use("/api/messages", messageRoutes);
+app.use("/api/wishlist", wishlistRoutes);
 
 app.use(express.static(path.join(__dirname, "public")));
 
