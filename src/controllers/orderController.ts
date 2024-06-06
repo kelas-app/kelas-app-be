@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Order from "../models/Order";
+import InteractionService from '../services/interactionService';
 
 export const getAllOrders = async (req: Request, res: Response) => {
   try {
@@ -33,6 +34,9 @@ export const createOrder = async (req: Request, res: Response) => {
   });
   try {
     const savedOrder = await newOrder.save();
+
+    await InteractionService.trackInteraction(buyerId, productId, 'createOrder', 1);
+
     res.status(201).json(savedOrder);
   } catch (error: any) {
     res.status(400).json({ message: error.message });

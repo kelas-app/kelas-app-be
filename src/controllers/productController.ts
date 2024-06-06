@@ -4,6 +4,7 @@ import { productSchema } from "../utils/validation";
 import { bucket } from "../utils/googleCloudStorage";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
+import InteractionService from '../services/interactionService';
 
 export const getAllProducts = async (
   req: Request,
@@ -17,15 +18,17 @@ export const getAllProducts = async (
   }
 };
 
-export const getProductById = async (
-  req: Request,
-  res: Response
-): Promise<Response> => {
+export const getProductById = async (req: Request, res: Response): Promise<Response> => {
   try {
-    const product = await Product.findById(req.params.id);
+    const productId = req.params.id;
+    const product = await Product.findById(productId);
+    
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
+    
+    await InteractionService.trackInteraction(req.user.id, productId, 'getProductById', 1);
+
     return res.status(200).json(product);
   } catch (error: any) {
     return res.status(500).json({ message: error.message });

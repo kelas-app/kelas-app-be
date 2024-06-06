@@ -6,6 +6,7 @@ import {
   viewCart as viewCartService,
   checkout as checkoutService,
 } from "../services/cartService";
+import InteractionService from '../services/interactionService';
 
 export const addToCart = async (
   req: Request,
@@ -16,6 +17,9 @@ export const addToCart = async (
 
   try {
     await addToCartService(userId, productId);
+    
+    await InteractionService.trackInteraction(userId, productId, 'addToCart', 1);
+
     return res.status(200).json({ message: "Item added to cart" });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
