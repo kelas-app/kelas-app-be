@@ -1,9 +1,11 @@
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 const config = {
-  mongoURI: process.env.MONGODB_URI || "mongodb://localhost:27017/kelas",
-
-  jwtSecret: process.env.JWT_SECRET || "kelasapp",
-
-  port: process.env.PORT || 3000,
+  mongoURI: process.env.MONGODB_URI,
+  jwtSecret: process.env.JWT_SECRET,
+  port: process.env.PORT,
 };
 
 export default config;

@@ -20,6 +20,10 @@ export const authenticateToken = (
     return res.status(401).json({ message: "Authentication token missing" });
   }
 
+  if (!config.jwtSecret) {
+    throw new Error('JWT secret is not defined in configuration.');
+  }
+  
   jwt.verify(token, config.jwtSecret, (err: any, user: any) => {
     if (err) {
       return res.status(403).json({ message: "Invalid token" });

@@ -50,8 +50,12 @@ export const registerUser = async (
 
     const savedUser = await newUser.save();
 
+    if (!config.jwtSecret) {
+      throw new Error('JWT secret is not defined in configuration.');
+    }
+    
     const token = jwt.sign({ id: savedUser._id }, config.jwtSecret, {
-      expiresIn: "1h",
+      expiresIn: '1h',
     });
 
     return res.status(201).json({
@@ -85,6 +89,10 @@ export const loginUser = async (
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
       return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    if (!config.jwtSecret) {
+      throw new Error('JWT secret is not defined in configuration.');
     }
 
     const token = jwt.sign({ id: user._id }, config.jwtSecret, {

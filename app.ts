@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import morgan from "morgan";
 import moment from "moment";
-import config from "./config/config";
+import dotenv from "dotenv";
 import authRoutes from "./src/routes/authRoutes";
 import userRoutes from "./src/routes/userRoutes";
 import productRoutes from "./src/routes/productRoutes";
@@ -15,6 +15,8 @@ import wishlistRoutes from "./src/routes/wishlistRoutes";
 import interactionRoutes from './src/routes/interactionRoutes';
 import { errorHandler } from "./src/middleware/errorMiddleware";
 import path from "path";
+
+dotenv.config();
 
 const app = express();
 
@@ -30,8 +32,9 @@ app.use(cors());
 app.use(express.json());
 app.use(morgan(customMorganFormat));
 
+
 mongoose
-  .connect(config.mongoURI)
+  .connect(process.env.MONGODB_URI as string)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.error("MongoDB connection error:", err));
 
