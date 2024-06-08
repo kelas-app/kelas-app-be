@@ -7,12 +7,15 @@ import {
     updateUser,
     deleteUser,
     addRatingAndReview,
-    getRatingsAndReviews
+    getRatingsAndReviews,
+    downloadAllUsers
 } from '../controllers/userController';
 
 const router = express.Router();
 
 router.use(authenticateToken);
+
+router.get('/download', downloadAllUsers);
 
 router.post('/', createUser);
 router.get('/', getUsers);

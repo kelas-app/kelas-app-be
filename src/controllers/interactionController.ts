@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import InteractionService from '../services/interactionService';
 import fs from 'fs';
-import path from 'path';
 
 export default class InteractionController {
   static async getAllInteractions(req: Request, res: Response) {
@@ -52,6 +51,4 @@ export default class InteractionController {
       res.status(500).json({ error: typedError.message });
     }
   }
-
-
 }

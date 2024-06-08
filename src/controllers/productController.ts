@@ -5,6 +5,7 @@ import { bucket } from "../utils/googleCloudStorage";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import InteractionService from '../services/interactionService';
+import fs from "fs";
 
 export const getAllProducts = async (
   req: Request,
@@ -178,5 +179,25 @@ export const deleteProduct = async (
     return res.status(200).json({ message: "Product deleted successfully" });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
+  }
+};
+
+export const downloadAllProducts = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const products = await Product.find();
+    const jsonData = JSON.stringify(products, null, 2);
+
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=allProducts.json"
+    );
+    res.setHeader("Content-Type", "application/json");
+
+    res.send(jsonData);
+  } catch (error: any) {
+    res.status(500).json({ message: error.message });
   }
 };

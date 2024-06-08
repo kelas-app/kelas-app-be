@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import User from "../models/User";
 import { ratingReviewSchema } from "../utils/validation";
 
+
 export const createUser = async (
   req: Request,
   res: Response
@@ -115,3 +116,27 @@ export const getRatingsAndReviews = async (
     return res.status(500).json({ message: error.message });
   }
 };
+
+export const downloadAllUsers = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  try {
+    const users = await User.find();
+    const jsonData = JSON.stringify(users, null, 2);
+
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=allUsers.json"
+    );
+    res.setHeader("Content-Type", "application/json");
+
+    res.send(jsonData);
+  } catch (error: any) {
+    console.error("Error in downloadAllUsers:", error);
+    res.status(500).json({ message: `Something went wrong: ${error.message}` });
+  }
+};
+
+
+
