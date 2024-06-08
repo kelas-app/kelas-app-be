@@ -7,7 +7,8 @@ const router = express.Router();
 router.use(authenticateToken);
 
 router.get('/', InteractionController.getAllInteractions);
-router.get('/:userId', InteractionController.getUserInteractions);
+router.get('/user/:userId', InteractionController.getUserInteractions);
+router.get('/download', InteractionController.downloadInteractions);
 router.post('/', InteractionController.trackInteraction);
 
 export default router;

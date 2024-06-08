@@ -1,4 +1,6 @@
 import Interaction from '../models/Interaction';
+import fs from 'fs';
+import path from 'path';
 
 export default class InteractionService {
 
@@ -40,6 +42,23 @@ export default class InteractionService {
       }
     } catch (error) {
       throw new Error('Failed to track interaction');
+    }
+  }
+
+  static async prepareInteractionsForDownload() {
+    try {
+      console.log('Preparing interactions for download'); 
+      const interactions = await this.getAllInteractions();
+      const downloadDir = path.join(__dirname, '..', 'downloads');
+      if (!fs.existsSync(downloadDir)) {
+        fs.mkdirSync(downloadDir);
+      }
+      const filePath = path.join(downloadDir, 'interactions.json');
+      fs.writeFileSync(filePath, JSON.stringify(interactions, null, 2));
+      console.log('Interactions prepared at:', filePath);
+      return filePath;
+    } catch (error) {
+      throw new Error('Failed to prepare interactions for download');
     }
   }
 

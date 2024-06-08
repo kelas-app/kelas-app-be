@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import InteractionService from '../services/interactionService';
+import fs from 'fs';
+import path from 'path';
 
 export default class InteractionController {
   static async getAllInteractions(req: Request, res: Response) {
@@ -33,4 +35,23 @@ export default class InteractionController {
       res.status(500).json({ error: typedError.message });
     }
   }
+
+  static async downloadInteractions(req: Request, res: Response) {
+    try {
+      console.log('Download interactions called');
+      const filePath = await InteractionService.prepareInteractionsForDownload();
+      res.download(filePath, 'interactions.json', (err) => {
+        if (err) {
+          throw new Error('Failed to download interactions');
+        }
+        fs.unlinkSync(filePath);
+      });
+    } catch (error) {
+      const typedError = error as Error;
+      console.error('Error in downloadInteractions:', typedError.message);
+      res.status(500).json({ error: typedError.message });
+    }
+  }
+
+
 }
