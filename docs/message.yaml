@@ -1,64 +1,14 @@
 openapi: 3.0.3
 info:
   title: Message API
-  description: API for managing messages in conversations
+  description: API for managing messages
   version: 1.0.0
+servers:
+  - url: http://161.97.109.65:3000
 paths:
-  /messages/{conversationId}:
-    get:
-      summary: Get messages in a conversation
-      security:
-        - bearerAuth: []
-      parameters:
-        - name: conversationId
-          in: path
-          required: true
-          schema:
-            type: string
-            example: 60d0fe4f5311236168a109cc
-      responses:
-        "200":
-          description: Successful retrieval
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    _id:
-                      type: string
-                      example: 60d0fe4f5311236168a109cd
-                    conversationId:
-                      type: string
-                      example: 60d0fe4f5311236168a109cc
-                    sender:
-                      type: string
-                      example: 60d0fe4f5311236168a109ca
-                    content:
-                      type: string
-                      example: Hello, I'm interested in your product.
-                    productImage:
-                      type: string
-                      example: "/uploads/product_image.jpg"
-                    sentAt:
-                      type: string
-                      format: date-time
-                      example: "2024-05-31T12:00:00Z"
-        "500":
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Internal server error
-
-  /messages:
+  /api/messages:
     post:
-      summary: Send message in conversation
+      summary: Send a message
       security:
         - bearerAuth: []
       requestBody:
@@ -76,47 +26,14 @@ paths:
                   example: 60d0fe4f5311236168a109ca
                 content:
                   type: string
-                  example: Hello, I'm interested in your product.
-                productImage:
-                  type: string
-                  example: "/uploads/product_image.jpg"
+                  example: "Hello, how are you?"
       responses:
         "201":
           description: Message sent successfully
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  _id:
-                    type: string
-                    example: 60d0fe4f5311236168a109cd
-                  conversationId:
-                    type: string
-                    example: 60d0fe4f5311236168a109cc
-                  sender:
-                    type: string
-                    example: 60d0fe4f5311236168a109ca
-                  content:
-                    type: string
-                    example: Hello, I'm interested in your product.
-                  productImage:
-                    type: string
-                    example: "/uploads/product_image.jpg"
-                  sentAt:
-                    type: string
-                    format: date-time
-                    example: "2024-05-31T12:00:00Z"
-        "404":
-          description: Conversation not found
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: Conversation not found
+                $ref: "#/components/schemas/Message"
         "500":
           description: Internal server error
           content:
@@ -127,3 +44,62 @@ paths:
                   error:
                     type: string
                     example: Internal server error
+
+  /api/messages/{conversationId}:
+    get:
+      summary: Get messages for a conversation
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: conversationId
+          in: path
+          required: true
+          schema:
+            type: string
+            example: 60d0fe4f5311236168a109cc
+      responses:
+        "200":
+          description: Successful retrieval of messages
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Message"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Internal server error
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    Message:
+      type: object
+      properties:
+        _id:
+          type: string
+          example: 60d0fe4f5311236168a109cd
+        conversationId:
+          type: string
+          example: 60d0fe4f5311236168a109cc
+        sender:
+          type: string
+          example: 60d0fe4f5311236168a109ca
+        content:
+          type: string
+          example: "Hello, how are you?"
+        sentAt:
+          type: string
+          format: date-time
+          example: 2021-06-22T12:34:56Z

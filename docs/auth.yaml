@@ -3,8 +3,10 @@ info:
   title: Authentication API
   description: API for user authentication (register and login)
   version: 1.0.0
+servers:
+  - url: http://161.97.109.65:3000
 paths:
-  /auth/register:
+  /api/auth/register:
     post:
       summary: Register a new user
       requestBody:
@@ -108,7 +110,7 @@ paths:
                     type: string
                     example: Internal server error
 
-  /auth/login:
+  /api/auth/login:
     post:
       summary: Login user
       requestBody:
