@@ -64,3 +64,16 @@ export const deleteProduct = async (id: string): Promise<void> => {
     }
   }
 };
+
+export const getProductsByCategory = async (category: string): Promise<IProduct[]> => {
+  try {
+    const products = await Product.find({ category });
+    return products;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(`Failed to get products by category: ${error.message}`);
+    } else {
+      throw new Error("Failed to get products by category: Unknown error occurred");
+    }
+  }
+};

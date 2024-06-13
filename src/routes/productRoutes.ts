@@ -7,6 +7,7 @@ import {
   updateProduct,
   deleteProduct,
   downloadAllProducts,
+  getProductsByCategory
 } from "../controllers/productController";
 import { checkSellerRole } from "../middleware/roleMiddleware";
 import upload from "../utils/upload";
@@ -16,7 +17,7 @@ const router = express.Router();
 router.use(authenticateToken);
 
 router.get("/download", downloadAllProducts);
-
+router.get("/category/:category", getProductsByCategory);
 router.get("/", getAllProducts);
 router.get("/:id", getProductById);
 

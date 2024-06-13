@@ -23,11 +23,11 @@ export const getProductById = async (req: Request, res: Response): Promise<Respo
   try {
     const productId = req.params.id;
     const product = await Product.findById(productId);
-    
+
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
-    
+
     await InteractionService.trackInteraction(req.user.id, productId, 'getProductById', 1);
 
     return res.status(200).json(product);
@@ -199,5 +199,23 @@ export const downloadAllProducts = async (
     res.send(jsonData);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+export const getProductsByCategory = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const category = req.params.category;
+    const products = await Product.find({ category });
+
+    if (!products.length) {
+      return res.status(404).json({ message: "No products found in this category" });
+    }
+
+    return res.status(200).json(products);
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
   }
 };
