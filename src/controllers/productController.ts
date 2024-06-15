@@ -1,4 +1,5 @@
 import { Request, Response } from "express";
+import axios from 'axios';
 import Product from "../models/Product";
 import { productSchema } from "../utils/validation";
 import { bucket } from "../utils/googleCloudStorage";
@@ -217,5 +218,49 @@ export const getProductsByCategory = async (
     return res.status(200).json(products);
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
+  }
+};
+
+export const getProductRecommendations = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { userId } = req.body;
+
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
+
+    const flaskUrl = `http://localhost:8000/recommend`;
+    const response = await axios.get(flaskUrl, {
+      params: { user_id: userId }
+    });
+
+    return res.status(200).json(response.data);
+  } catch (error) {
+    console.error('Error fetching recommendations:', error);
+    return res.status(500).json({ error: 'Error fetching recommendations' });
+  }
+};
+
+export const semanticSearch = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const { query } = req.body;
+
+    if (!query) {
+      return res.status(400).json({ error: 'Query parameter "query" is required' });
+    }
+
+    const flaskUrl = `http://localhost:8000/semantic-search?query=${query}`;
+    const response = await axios.get(flaskUrl);
+
+    return res.status(200).json(response.data);
+  } catch (error: any) {
+    console.error('Error performing semantic search:', error);
+    return res.status(500).json({ error: 'Error performing semantic search' });
   }
 };

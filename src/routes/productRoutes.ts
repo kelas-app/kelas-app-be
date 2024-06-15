@@ -7,7 +7,9 @@ import {
   updateProduct,
   deleteProduct,
   downloadAllProducts,
-  getProductsByCategory
+  getProductsByCategory,
+  getProductRecommendations,
+  semanticSearch
 } from "../controllers/productController";
 import { checkSellerRole } from "../middleware/roleMiddleware";
 import upload from "../utils/upload";
@@ -16,11 +18,12 @@ const router = express.Router();
 
 router.use(authenticateToken);
 
+router.get("/search", semanticSearch);
+router.get("/recommend", getProductRecommendations)
 router.get("/download", downloadAllProducts);
 router.get("/category/:category", getProductsByCategory);
 router.get("/", getAllProducts);
 router.get("/:id", getProductById);
-
 router.post(
   "/",
   upload.array("productImage", 2),

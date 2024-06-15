@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 import cors from "cors";
 import morgan from "morgan";
 import moment from "moment";
-import dotenv from "dotenv";
 import authRoutes from "./src/routes/authRoutes";
 import userRoutes from "./src/routes/userRoutes";
 import productRoutes from "./src/routes/productRoutes";
@@ -15,8 +14,6 @@ import wishlistRoutes from "./src/routes/wishlistRoutes";
 import interactionRoutes from './src/routes/interactionRoutes';
 import { errorHandler } from "./src/middleware/errorMiddleware";
 import path from "path";
-
-dotenv.config();
 
 const app = express();
 
