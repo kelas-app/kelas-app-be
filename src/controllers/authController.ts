@@ -109,14 +109,42 @@ export const loginUser = async (
   }
 };
 
-export const generateNeverExpiringToken = (payload: any): string => {
-  if (!config.jwtSecret) {
-    throw new Error('JWT secret is not defined in configuration.');
+export const generateNeverExpiringToken = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  const { error } = loginSchema.validate(req.body);
+  if (error) {
+    return res.status(400).json({ message: error.details[0].message });
   }
 
-  const expiration = Math.floor(Date.now() / 1000) + (10 * 365 * 24 * 60 * 60);
+  const { email, password } = req.body;
 
-  const token = jwt.sign({ ...payload, exp: expiration }, config.jwtSecret);
+  try {
+    const user = await User.findOne({ email: new RegExp(`^${email}$`, "i") });
+    if (!user) {
+      return res.status(404).json({ message: "Invalid credentials" });
+    }
 
-  return token;
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
+
+    if (!config.jwtSecret) {
+      throw new Error('JWT secret is not defined in configuration.');
+    }
+
+    const token = jwt.sign({ id: user._id }, config.jwtSecret, {
+      expiresIn: "10y",
+    });
+
+    return res.status(200).json({
+      status: "success",
+      message: "Login successful",
+      data: { ...user.toObject(), password: undefined, token},
+    });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
 };
