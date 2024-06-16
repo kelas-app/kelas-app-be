@@ -7,6 +7,8 @@ export interface IProduct extends Document {
   price: number;
   sellerId: string;
   productImage: string[];
+  isVisible: boolean; 
+  isCompleted: boolean; 
 }
 
 const ProductSchema: Schema = new Schema({
@@ -16,6 +18,8 @@ const ProductSchema: Schema = new Schema({
   price: { type: Number, required: true },
   sellerId: { type: String, required: true },
   productImage: { type: [String], required: true },
+  isVisible: { type: Boolean, default: true }, 
+  isCompleted: { type: Boolean, default: false } 
 });
 
 export default mongoose.model<IProduct>('Product', ProductSchema);

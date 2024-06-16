@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Order from "../models/Order";
+import Product from '../models/Product';
 import InteractionService from '../services/interactionService';
 
 export const getAllOrders = async (req: Request, res: Response) => {
@@ -18,6 +19,16 @@ export const getOrderById = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Order not found" });
     }
     res.json(order);
+  } catch (error: any) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getUserOrderHistory = async (req: Request, res: Response) => {
+  const userId = req.user.id;
+  try {
+    const orders = await Order.find({ buyerId: userId });
+    res.json(orders);
   } catch (error: any) {
     res.status(500).json({ message: "Internal server error" });
   }
@@ -44,15 +55,40 @@ export const createOrder = async (req: Request, res: Response) => {
 };
 
 export const updateOrder = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
   try {
     const updatedOrder = await Order.findByIdAndUpdate(
-      req.params.id,
-      req.body,
+      id,
+      { status },
       { new: true }
     );
+
     if (!updatedOrder) {
-      return res.status(404).json({ message: "Order not found" });
+      return res.status(404).json({ message: 'Order not found' });
     }
+
+    const productId = updatedOrder.productId;
+    const product = await Product.findById(productId);
+
+    if (!product) {
+      return res.status(404).json({ message: 'Product linked to order not found' });
+    }
+
+    if (status === 'Proses') {
+      product.isVisible = false;
+      await product.save();
+    } else if (status === 'Selesai') {
+      product.isVisible = false;
+      product.isCompleted = true;
+      await product.save();
+    } else if (status === 'Batal') {
+      product.isVisible = true;
+      product.isCompleted = false;
+      await product.save();
+    }
+
     res.json(updatedOrder);
   } catch (error: any) {
     res.status(400).json({ message: error.message });

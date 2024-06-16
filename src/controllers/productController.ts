@@ -13,17 +13,20 @@ export const getAllProducts = async (
   res: Response
 ): Promise<Response> => {
   try {
-    const products = await Product.find();
+    const products = await Product.find({ isVisible: true });
     return res.status(200).json(products);
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }
 };
 
-export const getProductById = async (req: Request, res: Response): Promise<Response> => {
+export const getProductById = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
   try {
     const productId = req.params.id;
-    const product = await Product.findById(productId);
+    const product = await Product.findOne({ _id: productId, isVisible: true });
 
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
@@ -237,7 +240,10 @@ export const getProductRecommendations = async (
       params: { user_id: userId }
     });
 
-    return res.status(200).json(response.data);
+    // Filter recommendations to include only visible products
+    const visibleProducts = response.data.filter((product: any) => product.isVisible);
+
+    return res.status(200).json(visibleProducts);
   } catch (error) {
     console.error('Error fetching recommendations:', error);
     return res.status(500).json({ error: 'Error fetching recommendations' });
@@ -258,8 +264,11 @@ export const semanticSearch = async (
     const flaskUrl = `http://localhost:8000/semantic-search?query=${query}`;
     const response = await axios.get(flaskUrl);
 
-    return res.status(200).json(response.data);
-  } catch (error: any) {
+    // Filter search results to include only visible products
+    const visibleProducts = response.data.filter((product: any) => product.isVisible);
+
+    return res.status(200).json(visibleProducts);
+  } catch (error) {
     console.error('Error performing semantic search:', error);
     return res.status(500).json({ error: 'Error performing semantic search' });
   }
