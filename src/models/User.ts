@@ -17,6 +17,7 @@ export interface IUser extends Document {
     comment: string;
   }[];
   wishlist: mongoose.Types.ObjectId;
+  nik?: string;
 }
 
 const UserSchema: Schema = new Schema({
@@ -35,7 +36,8 @@ const UserSchema: Schema = new Schema({
     value: { type: Number, required: true },
     comment: { type: String }
   }],
-  wishlist: { type: Schema.Types.ObjectId, ref: 'Wishlist' }
+  wishlist: { type: Schema.Types.ObjectId, ref: 'Wishlist' },
+  nik: { type: String }
 });
 
 export default mongoose.model<IUser>('User', UserSchema);

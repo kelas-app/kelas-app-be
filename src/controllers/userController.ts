@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import User from "../models/User";
-import { ratingReviewSchema } from "../utils/validation";
+import { ratingReviewSchema, nikSchema } from "../utils/validation";
 
 
 export const createUser = async (
@@ -48,14 +48,33 @@ export const updateUser = async (
   res: Response
 ): Promise<Response> => {
   const { id } = req.params;
+  const { role, nik } = req.body;
+
   try {
-    const updatedUser = await User.findByIdAndUpdate(id, req.body, {
-      new: true,
-    });
-    if (!updatedUser) {
+    const user = await User.findById(id);
+    if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    return res.status(200).json(updatedUser);
+
+    // Validate NIK if the user is updating their role to seller
+    if (role === 'seller') {
+      if (!nik && !user.nik) {
+        return res.status(400).json({ message: "NIK is required for sellers" });
+      }
+      if (nik) {
+        const { error } = nikSchema.validate({ nik });
+        if (error) {
+          return res.status(400).json({ message: error.message });
+        }
+        user.nik = nik; // Update the NIK if provided
+      }
+    }
+
+    // Update the role
+    user.role = role;
+    await user.save();
+
+    return res.status(200).json(user);
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }

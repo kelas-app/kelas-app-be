@@ -129,3 +129,12 @@ export const ratingReviewSchema = Joi.object({
     "string.max": "Comment should have a maximum length of {#limit}",
   }),
 });
+
+export const nikSchema = Joi.object({
+  nik: Joi.string().length(16).pattern(/^[0-9]+$/).required().messages({
+    'string.base': 'NIK should be a type of text',
+    'string.length': 'NIK must be exactly 16 digits',
+    'string.pattern.base': 'NIK must contain only numbers',
+    'any.required': 'NIK is required'
+  })
+});
