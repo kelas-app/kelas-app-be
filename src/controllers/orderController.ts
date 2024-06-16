@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Order from "../models/Order";
 import Product from '../models/Product';
+import ShoppingCart from '../models/Cart';
 import InteractionService from '../services/interactionService';
 
 export const getAllOrders = async (req: Request, res: Response) => {
@@ -36,6 +37,7 @@ export const getUserOrderHistory = async (req: Request, res: Response) => {
 
 export const createOrder = async (req: Request, res: Response) => {
   const { buyerId, sellerId, productId, totalPrice, status } = req.body;
+
   const newOrder = new Order({
     buyerId,
     sellerId,
@@ -43,10 +45,33 @@ export const createOrder = async (req: Request, res: Response) => {
     totalPrice,
     status,
   });
+
   try {
     const savedOrder = await newOrder.save();
 
+    const cart = await ShoppingCart.findOne({ userId: buyerId });
+
+    if (!cart) {
+      return res.status(404).json({ message: 'Shopping cart not found for user' });
+    }
+
+    const updatedItems = cart.items.filter(item => item.productId.toString() !== productId);
+
+    cart.items = updatedItems;
+
+    await cart.save();
+
     await InteractionService.trackInteraction(buyerId, productId, 'createOrder', 1);
+
+    const product = await Product.findById(productId);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found' });
+    }
+
+    product.isVisible = false;
+    product.isCompleted = false;
+
+    await product.save();
 
     res.status(201).json(savedOrder);
   } catch (error: any) {

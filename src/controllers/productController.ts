@@ -240,7 +240,6 @@ export const getProductRecommendations = async (
       params: { user_id: userId }
     });
 
-    // Filter recommendations to include only visible products
     const visibleProducts = response.data.filter((product: any) => product.isVisible);
 
     return res.status(200).json(visibleProducts);
@@ -264,10 +263,9 @@ export const semanticSearch = async (
     const flaskUrl = `http://localhost:8000/semantic-search?query=${query}`;
     const response = await axios.get(flaskUrl);
 
-    // Filter search results to include only visible products
-    const visibleProducts = response.data.filter((product: any) => product.isVisible);
+    const productNames = response.data;
 
-    return res.status(200).json(visibleProducts);
+    return res.status(200).json(productNames);
   } catch (error) {
     console.error('Error performing semantic search:', error);
     return res.status(500).json({ error: 'Error performing semantic search' });
