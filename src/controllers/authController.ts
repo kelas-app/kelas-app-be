@@ -102,10 +102,21 @@ export const loginUser = async (
     return res.status(200).json({
       status: "success",
       message: "Login successful",
-      token,
-      data: { ...user.toObject(), password: undefined },
+      data: { ...user.toObject(), password: undefined, token},
     });
   } catch (error: any) {
     return res.status(500).json({ message: error.message });
   }
+};
+
+export const generateNeverExpiringToken = (payload: any): string => {
+  if (!config.jwtSecret) {
+    throw new Error('JWT secret is not defined in configuration.');
+  }
+
+  const expiration = Math.floor(Date.now() / 1000) + (10 * 365 * 24 * 60 * 60);
+
+  const token = jwt.sign({ ...payload, exp: expiration }, config.jwtSecret);
+
+  return token;
 };
