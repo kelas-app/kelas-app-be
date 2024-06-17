@@ -271,3 +271,23 @@ export const semanticSearch = async (
     return res.status(500).json({ error: 'Error performing semantic search' });
   }
 };
+
+export const searchProducts = async (
+  req: Request,
+  res: Response
+): Promise<Response> => {
+  try {
+    const searchTerm = req.query.term?.toString() || '';
+    const regex = new RegExp(searchTerm, 'i');
+    const products = await Product.find({ name: regex, isVisible: true });
+
+    if (!products.length) {
+      return res.status(404).json({ message: 'No products found' });
+    }
+
+    return res.status(200).json(products);
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};
+

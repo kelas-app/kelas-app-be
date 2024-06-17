@@ -9,7 +9,8 @@ import {
   downloadAllProducts,
   getProductsByCategory,
   getProductRecommendations,
-  semanticSearch
+  semanticSearch,
+  searchProducts
 } from "../controllers/productController";
 import { checkSellerRole } from "../middleware/roleMiddleware";
 import upload from "../utils/upload";
@@ -18,7 +19,8 @@ const router = express.Router();
 
 router.use(authenticateToken);
 
-router.get("/search", semanticSearch);
+router.get('/search', searchProducts);
+router.get("/semantic-search", semanticSearch);
 router.get("/recommend", getProductRecommendations)
 router.get("/download", downloadAllProducts);
 router.get("/category/:category", getProductsByCategory);
