@@ -131,3 +131,24 @@ export const deleteOrder = async (req: Request, res: Response) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const getSellerDashboard = async (req: Request, res: Response): Promise<Response> => {
+  try {
+    const sellerId = req.user.id;
+
+    const forSaleProducts = await Product.find({ sellerId, isVisible: true, isCompleted: false });
+
+    const orders = await Order.find({ sellerId });
+
+    const processingOrders = orders.filter(order => order.status === 'Proses');
+    const completedOrders = orders.filter(order => order.status === 'Selesai');
+
+    return res.status(200).json({
+      dijual: forSaleProducts,
+      diproses: processingOrders,
+      selesai: completedOrders
+    });
+  } catch (error: any) {
+    return res.status(500).json({ message: error.message });
+  }
+};
