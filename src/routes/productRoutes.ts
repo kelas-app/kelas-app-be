@@ -19,9 +19,9 @@ const router = express.Router();
 
 router.use(authenticateToken);
 
-router.get('/search', searchProducts);
-router.get("/semantic-search", semanticSearch);
-router.get("/recommend", getProductRecommendations)
+router.post('/search', searchProducts);
+router.post("/semantic-search", semanticSearch);
+router.post("/recommend", getProductRecommendations)
 router.get("/download", downloadAllProducts);
 router.get("/category/:category", getProductsByCategory);
 router.get("/", getAllProducts);
