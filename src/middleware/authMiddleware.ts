@@ -1,11 +1,12 @@
-import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
-import config from "../../config/config";
+// middleware/authMiddleware.ts
+import { Request, Response, NextFunction } from "express"
+import jwt from "jsonwebtoken"
+import config from "../../config/config"
 
 declare global {
   namespace Express {
     interface Request {
-      user?: any;
+      user?: any
     }
   }
 }
@@ -15,20 +16,20 @@ export const authenticateToken = (
   res: Response,
   next: NextFunction
 ) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  const token = req.headers.authorization?.split(" ")[1]
   if (!token) {
-    return res.status(401).json({ message: "Authentication token missing" });
+    return res.status(401).json({ message: "Authentication token missing" })
   }
 
   if (!config.jwtSecret) {
-    throw new Error('JWT secret is not defined in configuration.');
+    throw new Error("JWT secret is not defined in configuration.")
   }
-  
+
   jwt.verify(token, config.jwtSecret, (err: any, user: any) => {
     if (err) {
-      return res.status(403).json({ message: "Invalid token" });
+      return res.status(403).json({ message: "Invalid token" })
     }
-    req.user = user;
-    next();
-  });
-};
+    req.user = user
+    next()
+  })
+}

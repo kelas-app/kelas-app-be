@@ -1,13 +1,19 @@
-openapi: 3.0.3
+openapi: 3.0.1
 info:
-  title: Authentication API
-  description: API for user authentication (register and login)
+  title: Auth API
+  description: API documentation for user authentication and token generation.
   version: 1.0.0
 servers:
-  - url: http://161.97.109.65:3000
+  - url: http://161.97.109.65:3000/
+tags:
+  - name: Authentication
+    description: Operations related to user authentication
+
 paths:
   /api/auth/register:
     post:
+      tags:
+        - Authentication
       summary: Register a new user
       requestBody:
         required: true
@@ -18,27 +24,25 @@ paths:
               properties:
                 firstname:
                   type: string
-                  example: John
                 lastname:
                   type: string
-                  example: Doe
                 username:
                   type: string
-                  example: johndoe
                 email:
                   type: string
-                  format: email
-                  example: johndoe@example.com
                 phone:
                   type: string
-                  example: "1234567890"
                 password:
                   type: string
-                  format: password
-                  example: "password123"
                 address:
                   type: string
-                  example: "123 Main St, Anytown, USA"
+              required:
+                - firstname
+                - lastname
+                - username
+                - email
+                - phone
+                - password
       responses:
         "201":
           description: User created successfully
@@ -58,61 +62,34 @@ paths:
                     properties:
                       _id:
                         type: string
-                        example: 60d0fe4f5311236168a109ca
                       firstname:
                         type: string
-                        example: John
                       lastname:
                         type: string
-                        example: Doe
                       username:
                         type: string
-                        example: johndoe
                       email:
                         type: string
-                        example: johndoe@example.com
                       phone:
                         type: string
-                        example: "1234567890"
                       address:
                         type: string
-                        example: "123 Main St, Anytown, USA"
                       avatar:
                         type: string
-                        example: "/uploads/avatar.png"
+                      token:
+                        type: string
                   token:
                     type: string
-                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
         "400":
-          description: Bad request, invalid input
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: error
-                  message:
-                    type: string
-                    example: Email already registered
+          description: Bad Request
         "500":
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  status:
-                    type: string
-                    example: error
-                  message:
-                    type: string
-                    example: Internal server error
+          description: Internal Server Error
 
   /api/auth/login:
     post:
-      summary: Login user
+      tags:
+        - Authentication
+      summary: Login a user
       requestBody:
         required: true
         content:
@@ -122,12 +99,11 @@ paths:
               properties:
                 email:
                   type: string
-                  format: email
-                  example: johndoe@example.com
                 password:
                   type: string
-                  format: password
-                  example: password123
+              required:
+                - email
+                - password
       responses:
         "200":
           description: Login successful
@@ -142,70 +118,119 @@ paths:
                   message:
                     type: string
                     example: Login successful
-                  token:
-                    type: string
-                    example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
                   data:
                     type: object
                     properties:
                       _id:
                         type: string
-                        example: 60d0fe4f5311236168a109ca
                       firstname:
                         type: string
-                        example: John
                       lastname:
                         type: string
-                        example: Doe
                       username:
                         type: string
-                        example: johndoe
                       email:
                         type: string
-                        example: johndoe@example.com
                       phone:
                         type: string
-                        example: "1234567890"
                       address:
                         type: string
-                        example: "123 Main St, Anytown, USA"
+                      avatar:
+                        type: string
+                      token:
+                        type: string
         "400":
-          description: Bad request, invalid input
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Invalid credentials
+          description: Bad Request
         "401":
-          description: Unauthorized, invalid credentials
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Invalid credentials
+          description: Unauthorized
         "404":
-          description: Not found, user does not exist
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Invalid credentials
+          description: Not Found
         "500":
-          description: Internal server error
+          description: Internal Server Error
+
+  /api/auth/generateToken:
+    post:
+      tags:
+        - Authentication
+      summary: Generate a never-expiring token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+                - email
+                - password
+      responses:
+        "200":
+          description: Token generation successful
           content:
             application/json:
               schema:
                 type: object
                 properties:
+                  status:
+                    type: string
+                    example: success
                   message:
                     type: string
-                    example: Internal server error
+                    example: Login successful
+                  data:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                      firstname:
+                        type: string
+                      lastname:
+                        type: string
+                      username:
+                        type: string
+                      email:
+                        type: string
+                      phone:
+                        type: string
+                      address:
+                        type: string
+                      avatar:
+                        type: string
+                      token:
+                        type: string
+        "400":
+          description: Bad Request
+        "401":
+          description: Unauthorized
+        "404":
+          description: Not Found
+        "500":
+          description: Internal Server Error
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: string
+        firstname:
+          type: string
+        lastname:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        address:
+          type: string
+        avatar:
+          type: string
+        token:
+          type: string
