@@ -168,6 +168,11 @@ export const updateProfile = async (
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" })
     }
+
+    if (updatedUser.nik === undefined) {
+      updatedUser.nik = ""
+    }
+
     return res.status(200).json(updatedUser)
   } catch (error: any) {
     return res.status(500).json({ message: error.message })
