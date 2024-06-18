@@ -235,7 +235,7 @@ export const getProductRecommendations = async (
       return res.status(400).json({ error: 'User ID is required' });
     }
 
-    const flaskUrl = `http://localhost:8000/recommend`;
+    const flaskUrl = `https://flask-app-igzsenohlq-et.a.run.app/recommend`;
     const response = await axios.get(flaskUrl, {
       params: { user_id: userId }
     });
@@ -260,7 +260,7 @@ export const semanticSearch = async (
       return res.status(400).json({ error: 'Query parameter "query" is required' });
     }
 
-    const flaskUrl = `http://localhost:8000/semantic-search?query=${query}`;
+    const flaskUrl = `https://flask-app-igzsenohlq-et.a.run.app/semantic-search?query=${query}`;
     const response = await axios.get(flaskUrl);
 
     const productNames = response.data;
