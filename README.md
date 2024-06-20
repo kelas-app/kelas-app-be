@@ -12,7 +12,7 @@ This repository contains the source code for the Kelas application's API server,
 
 ## Documentation
 
-[Documentation](https://kelasapp.gitbook.io/capstone-bangkit)
+[Documentation](https://kelas-backend-app-igzsenohlq-et.a.run.app/api-docs)
 
 
 ## Environment Variables
